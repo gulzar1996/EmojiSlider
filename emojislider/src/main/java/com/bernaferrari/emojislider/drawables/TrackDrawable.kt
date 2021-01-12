@@ -39,7 +39,6 @@ class TrackDrawable : GenericDrawableCallback() {
         canvas.save()
         canvas.translate(bounds.left.toFloat(), bounds.top.toFloat())
 
-
         //First Bar
         barRect.set(
                 0f,
@@ -61,10 +60,6 @@ class TrackDrawable : GenericDrawableCallback() {
         canvas.drawRect(barRect, progressGradientB)
 
         canvas.restore()
-    }
-
-    override fun onBoundsChange(rect: Rect) {
-        Log.d("TD", "onBoundsChange: ${rect}")
     }
 
     override fun getIntrinsicHeight(): Int = totalHeight
