@@ -208,18 +208,18 @@ class EmojiSlider @JvmOverloads constructor(
      * The track progress color for the left side of the slider - default is purple.
      */
     var colorStartB: Int
-        get() = trackDrawable.colorStartA
+        get() = trackDrawable.colorStartB
         set(value) {
-            trackDrawable.colorStartA = value
+            trackDrawable.colorStartB = value
         }
 
     /**
      * The track progress color for the right side of the slider - default is red.
      */
     var colorEndB: Int
-        get() = trackDrawable.colorEndA
+        get() = trackDrawable.colorEndB
         set(value) {
-            trackDrawable.colorEndA = value
+            trackDrawable.colorEndB = value
         }
 
     //////////////////////////////////////////
@@ -461,12 +461,12 @@ class EmojiSlider @JvmOverloads constructor(
             try {
                 progress = array.getProgress()
 
-                colorStartA = array.getProgressGradientStart()
-                colorEndA = array.getProgressGradientEnd()
+                colorStartA = array.getProgressGradientStartA()
+                colorEndA = array.getProgressGradientEndA()
                 colorTrack = array.getSliderTrackColor()
 
-                colorStartA = array.getProgressGradientStart()
-                colorEndA = array.getProgressGradientEnd()
+                colorStartB = array.getProgressGradientStartB()
+                colorEndB = array.getProgressGradientEndB()
 
                 registerTouchOnTrack = array.getThumbAllowScrollAnywhere()
                 allowReselection = array.getAllowReselection()
@@ -533,12 +533,20 @@ class EmojiSlider @JvmOverloads constructor(
     // PRIVATE GET METHODS
     //////////////////////////////////////////
 
-    private fun TypedArray.getProgressGradientStart(): Int {
+    private fun TypedArray.getProgressGradientStartA(): Int {
            return context.getColorCompat(R.color.slider_gradient_start_A)
     }
 
-    private fun TypedArray.getProgressGradientEnd(): Int {
+    private fun TypedArray.getProgressGradientStartB(): Int {
+        return context.getColorCompat(R.color.slider_gradient_start_B)
+    }
+
+    private fun TypedArray.getProgressGradientEndA(): Int {
         return  context.getColorCompat(R.color.slider_gradient_end_A)
+    }
+
+    private fun TypedArray.getProgressGradientEndB(): Int {
+        return  context.getColorCompat(R.color.slider_gradient_end_B)
     }
 
     private fun TypedArray.getSliderTrackColor(): Int {
