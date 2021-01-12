@@ -179,22 +179,47 @@ class EmojiSlider @JvmOverloads constructor(
             trackDrawable.trackColor.color = value
         }
 
+    /*
+        A - B
+     */
+
+    //Color A
     /**
      * The track progress color for the left side of the slider - default is purple.
      */
-    var colorStart: Int
-        get() = trackDrawable.colorStart
+    var colorStartA: Int
+        get() = trackDrawable.colorStartA
         set(value) {
-            trackDrawable.colorStart = value
+            trackDrawable.colorStartA = value
         }
 
     /**
      * The track progress color for the right side of the slider - default is red.
      */
-    var colorEnd: Int
-        get() = trackDrawable.colorEnd
+    var colorEndA: Int
+        get() = trackDrawable.colorEndA
         set(value) {
-            trackDrawable.colorEnd = value
+            trackDrawable.colorEndA = value
+        }
+
+
+    //COLOR B
+    /**
+     * The track progress color for the left side of the slider - default is purple.
+     */
+    var colorStartB: Int
+        get() = trackDrawable.colorStartA
+        set(value) {
+            trackDrawable.colorStartA = value
+        }
+
+    /**
+     * The track progress color for the right side of the slider - default is red.
+     */
+    var colorEndB: Int
+        get() = trackDrawable.colorEndA
+        set(value) {
+            trackDrawable.colorEndA = value
         }
 
     //////////////////////////////////////////
@@ -208,7 +233,7 @@ class EmojiSlider @JvmOverloads constructor(
 
     /**
      * Drawable which will contain the track: both the background with help from [colorTrack]
-     * and the progress by mixing together [colorStart] and [colorEnd]
+     * and the progress by mixing together [colorStartA] and [colorEndA]
      */
     val trackDrawable: TrackDrawable = TrackDrawable()
 
@@ -298,7 +323,7 @@ class EmojiSlider @JvmOverloads constructor(
         mAverageSpring.endValue = 1.0
 
         if (shouldDisplayAverage && shouldDisplayTooltip) {
-            showAverageTooltip()
+            //showAverageTooltip()
         }
 
         mThumbSpring.endValue = 0.0
@@ -436,12 +461,12 @@ class EmojiSlider @JvmOverloads constructor(
             try {
                 progress = array.getProgress()
 
-                colorStart = array.getProgressGradientStart()
-                colorEnd = array.getProgressGradientEnd()
+                colorStartA = array.getProgressGradientStart()
+                colorEndA = array.getProgressGradientEnd()
                 colorTrack = array.getSliderTrackColor()
 
-                colorStart = array.getProgressGradientStart()
-                colorEnd = array.getProgressGradientEnd()
+                colorStartA = array.getProgressGradientStart()
+                colorEndA = array.getProgressGradientEnd()
 
                 registerTouchOnTrack = array.getThumbAllowScrollAnywhere()
                 allowReselection = array.getAllowReselection()
@@ -471,8 +496,8 @@ class EmojiSlider @JvmOverloads constructor(
                 array.recycle()
             }
         } else {
-            colorStart = context.getColorCompat(R.color.slider_gradient_start)
-            colorEnd = context.getColorCompat(R.color.slider_gradient_end)
+            colorStartA = context.getColorCompat(R.color.slider_gradient_start_A)
+            colorEndA = context.getColorCompat(R.color.slider_gradient_end_A)
             colorTrack = context.getColorCompat(R.color.slider_track)
             emoji = emoji
         }
@@ -509,17 +534,11 @@ class EmojiSlider @JvmOverloads constructor(
     //////////////////////////////////////////
 
     private fun TypedArray.getProgressGradientStart(): Int {
-        return this.getColor(
-            R.styleable.EmojiSlider_bar_progress_color_start,
-            context.getColorCompat(R.color.slider_gradient_start)
-        )
+           return context.getColorCompat(R.color.slider_gradient_start_A)
     }
 
     private fun TypedArray.getProgressGradientEnd(): Int {
-        return this.getColor(
-            R.styleable.EmojiSlider_bar_progress_color_end,
-            context.getColorCompat(R.color.slider_gradient_end)
-        )
+        return  context.getColorCompat(R.color.slider_gradient_end_A)
     }
 
     private fun TypedArray.getSliderTrackColor(): Int {
@@ -668,9 +687,9 @@ class EmojiSlider @JvmOverloads constructor(
         super.onDraw(canvas)
 
         trackDrawable.draw(canvas)
-        if (shouldDisplayAverage) drawAverage(canvas)
+        //if (shouldDisplayAverage) drawAverage(canvas)
         drawThumb(canvas)
-        if (shouldDisplayResultPicture) drawProfilePicture(canvas)
+        //if (shouldDisplayResultPicture) drawProfilePicture(canvas)
     }
 
     private fun drawThumb(canvas: Canvas) {
@@ -710,8 +729,8 @@ class EmojiSlider @JvmOverloads constructor(
 
     private fun drawAverage(canvas: Canvas) {
         averageDrawable.outerColor = getCorrectColor(
-            colorStart,
-            colorEnd,
+            colorStartA,
+            colorEndA,
             averageProgressValue
         )
 

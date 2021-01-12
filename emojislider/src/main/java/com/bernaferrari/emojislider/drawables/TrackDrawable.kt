@@ -13,21 +13,13 @@ class TrackDrawable : GenericDrawableCallback() {
     private val progressGradient = Paint(1)
 
     private val barRect = RectF()
+    private var gradientRect = Rect()
     var percentProgress = 0.90f
 
-    internal var colorStart: Int = 0
-        set(value) {
-            if (field == value) return
-            field = value
-            updateShader(bounds)
-        }
+    //TODO remove setters from here as it is being used during onDraw
+    internal var colorStartA: Int = 0
 
-    internal var colorEnd: Int = 0
-        set(value) {
-            if (field == value) return
-            field = value
-            updateShader(bounds)
-        }
+    internal var colorEndA: Int = 0
 
     private var radius: Float = 0f
     internal var totalHeight: Int = 0
@@ -59,7 +51,8 @@ class TrackDrawable : GenericDrawableCallback() {
             percentProgress * bounds.width(),
             bounds.height() / 2f + trackHeight / 2
         )
-
+        barRect.round(gradientRect)
+        updateShader(gradientRect)
         canvas.drawRoundRect(barRect, radius, radius, progressGradient)
         canvas.restore()
     }
@@ -74,8 +67,8 @@ class TrackDrawable : GenericDrawableCallback() {
             rect.exactCenterY(),
             rect.width().toFloat(),
             rect.exactCenterY(),
-            colorStart,
-            colorEnd,
+            colorStartA,
+            colorEndA,
             TileMode.CLAMP
         )
     }

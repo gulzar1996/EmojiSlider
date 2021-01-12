@@ -181,8 +181,8 @@ class Customize : Fragment() {
     private fun updateUiFromState() {
         beginDelayedTransition()
 
-        slider.colorStart = uiState.colorStart
-        slider.colorEnd = uiState.colorEnd
+        slider.colorStartA = uiState.colorStart
+        slider.colorEndA = uiState.colorEnd
 
         slider.allowReselection = uiState.thumbAllowReselection
         thumbAllowReselection.isActivated = uiState.thumbAllowReselection
