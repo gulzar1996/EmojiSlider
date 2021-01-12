@@ -15,7 +15,6 @@ class TrackDrawable : GenericDrawableCallback() {
     private val progressGradientB = Paint(1)
 
     private val barRect = RectF()
-    private var gradientRect = Rect()
     var percentProgress = 0.90f
 
     //TODO remove setters from here as it is being used during onDraw
@@ -40,6 +39,7 @@ class TrackDrawable : GenericDrawableCallback() {
         canvas.save()
         canvas.translate(bounds.left.toFloat(), bounds.top.toFloat())
 
+
         //First Bar
         barRect.set(
                 0f,
@@ -47,10 +47,8 @@ class TrackDrawable : GenericDrawableCallback() {
                 percentProgress * bounds.width(),
                 bounds.height() / 2f + trackHeight / 2
         )
-        barRect.round(gradientRect)
-        updateShader(gradientRect, progressGradientA, colorStartA, colorEndA)
-        canvas.drawRoundRect(barRect, radius, radius, progressGradientA)
-        canvas.restore()
+        updateShader(barRect, progressGradientA, colorStartA, colorEndA)
+        canvas.drawRect(barRect, progressGradientA)
 
         //Second bar
         barRect.set(
@@ -59,11 +57,10 @@ class TrackDrawable : GenericDrawableCallback() {
                 bounds.width().toFloat(),
                 bounds.height() / 2f + trackHeight / 2
         )
-        barRect.round(gradientRect)
-        updateShader(gradientRect, progressGradientB, colorStartB, colorEndB)
-        canvas.drawRoundRect(barRect, radius, radius, progressGradientB)
+        updateShader(barRect, progressGradientB, colorStartB, colorEndB)
+        canvas.drawRect(barRect, progressGradientB)
 
-
+        canvas.restore()
     }
 
     override fun onBoundsChange(rect: Rect) {
@@ -72,12 +69,12 @@ class TrackDrawable : GenericDrawableCallback() {
 
     override fun getIntrinsicHeight(): Int = totalHeight
 
-    private fun updateShader(rect: Rect, progressGradient: Paint, colorS: Int, colorE: Int) {
+    private fun updateShader(rect: RectF, progressGradient: Paint, colorS: Int, colorE: Int) {
         progressGradient.shader = LinearGradient(
                 0.0f,
-                rect.exactCenterY(),
+                rect.centerX(),
                 rect.width().toFloat(),
-                rect.exactCenterY(),
+                rect.centerY(),
                 colorS,
                 colorE,
                 TileMode.CLAMP
