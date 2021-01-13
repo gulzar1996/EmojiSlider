@@ -2,13 +2,13 @@ package com.bernaferrari.emojislider
 
 import android.content.Context
 import android.content.res.TypedArray
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import android.util.Log
-import android.view.MotionEvent
 import android.view.View
-import android.view.ViewConfiguration
 import androidx.dynamicanimation.animation.DynamicAnimation
 import androidx.dynamicanimation.animation.FloatPropertyCompat
 import androidx.dynamicanimation.animation.SpringAnimation
@@ -17,9 +17,6 @@ import com.bernaferrari.emojislider.drawables.CircleDrawable
 import com.bernaferrari.emojislider.drawables.ResultDrawable
 import com.bernaferrari.emojislider.drawables.TextDrawable
 import com.bernaferrari.emojislider.drawables.TrackDrawable
-import com.cpiz.android.bubbleview.BubbleStyle
-import com.cpiz.android.bubbleview.BubbleTextView
-import com.facebook.rebound.*
 import kotlin.math.roundToInt
 
 class EmojiSlider @JvmOverloads constructor(
@@ -29,16 +26,7 @@ class EmojiSlider @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
 
     private companion object {
-        const val INITIAL_POSITION = 0.25f
-        const val INITIAL_AVERAGE_POSITION = 0.5f
-
-        const val INITIAL_AUTO_DISMISS_TIMER = 2500
-
-        const val TENSION_SMALL = 3.0
-        const val TENSION_BIG = 40.0
-
-        const val FRICTION_SMALL = 5.0
-        const val FRICTION_BIG = 7.0
+        const val INITIAL_POSITION = 0.5f
     }
 
     private val desiredWidth: Int
@@ -123,14 +111,16 @@ class EmojiSlider @JvmOverloads constructor(
 
 
     fun setProgress(newProgress: Float, isAnimation: Boolean = false) {
-        if (isAnimation)
+        if (isAnimation) {
+//            progressAnimation.skipToEnd()
+//            thumbAnimation.skipToEnd()
+            progressAnimation.cancel()
             progressAnimation.animateToFinalPosition(newProgress)
-        else {
+        } else {
             progress = newProgress
             thumbProgress = newProgress
         }
     }
-
 
 
     /*
@@ -336,8 +326,6 @@ class EmojiSlider @JvmOverloads constructor(
 
     private fun TypedArray.getEmoji(): String =
             this.getString(R.styleable.EmojiSlider_emoji) ?: emoji
-
-
 
 
     //////////////////////////////////////////
