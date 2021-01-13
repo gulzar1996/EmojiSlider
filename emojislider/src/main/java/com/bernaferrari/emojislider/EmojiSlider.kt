@@ -85,8 +85,8 @@ class EmojiSlider @JvmOverloads constructor(
 
     val progressAnimation by lazy {
         SpringAnimation(progress, progressAnimProperty, 0f).apply {
-            spring.stiffness = STIFFNESS
-            spring.dampingRatio = SpringForce.DAMPING_RATIO_LOW_BOUNCY
+            spring.stiffness = SpringForce.STIFFNESS_LOW
+            spring.dampingRatio = SpringForce.DAMPING_RATIO_NO_BOUNCY
             minimumVisibleChange = 0.001f
             setMinValue(0f)
             setMaxValue(1f)
@@ -97,8 +97,8 @@ class EmojiSlider @JvmOverloads constructor(
     val thumbAnimation by lazy {
         SpringAnimation(thumbProgress, thumbAnimProperty, 0f).apply {
             spring.stiffness = SpringForce.STIFFNESS_LOW
-            spring.dampingRatio = SpringForce.DAMPING_RATIO_LOW_BOUNCY
-            minimumVisibleChange = 0.001f
+            spring.dampingRatio = SpringForce.DAMPING_RATIO_NO_BOUNCY
+            minimumVisibleChange = 1f
             setMinValue(0f)
             setMaxValue(1f)
         }
@@ -372,7 +372,7 @@ class EmojiSlider @JvmOverloads constructor(
     private fun drawThumb(canvas: Canvas) {
 
         val widthPosition = thumbProgress * trackDrawable.bounds.width()
-        val thumbScale = 1f
+        val thumbScale = 0.5f
 
         canvas.save()
         canvas.translate(trackDrawable.bounds.left.toFloat(), trackDrawable.bounds.top.toFloat())
