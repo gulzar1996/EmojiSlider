@@ -1,14 +1,10 @@
 package com.bernaferrari.emojislidersample
 
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.SimpleTarget
-import com.bumptech.glide.request.transition.Transition
 import kotlinx.android.synthetic.main.frag_main.*
 
 
@@ -28,10 +24,15 @@ class Showcase : Fragment() {
 
         bt_increase.setOnClickListener {
             val currentProgress = sliderv4.progress
-            sliderv4.setProgressWithAnimation(currentProgress + (0.4).toFloat()) }
+            sliderv4.setProgressWithAnimation((currentProgress + random()).toFloat())
+        }
         bt_decrease.setOnClickListener {
             val currentProgress = sliderv4.progress
-            sliderv4.setProgressWithAnimation(currentProgress - (0.4).toFloat()) }
+            sliderv4.setProgressWithAnimation((currentProgress - random()).toFloat())
+        }
 
     }
+
+    fun random(): Double = (Math.random() * (0.5f)) as Double
+
 }

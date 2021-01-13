@@ -2,9 +2,7 @@ package com.bernaferrari.emojislider
 
 import android.content.Context
 import android.content.res.TypedArray
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Rect
+import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.util.Log
@@ -16,6 +14,7 @@ import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.dynamicanimation.animation.SpringForce
 import com.bernaferrari.emojislider.drawables.CircleDrawable
 import com.bernaferrari.emojislider.drawables.ResultDrawable
+import com.bernaferrari.emojislider.drawables.TextDrawable
 import com.bernaferrari.emojislider.drawables.TrackDrawable
 import com.cpiz.android.bubbleview.BubbleStyle
 import com.cpiz.android.bubbleview.BubbleTextView
@@ -255,6 +254,7 @@ class EmojiSlider @JvmOverloads constructor(
      * Drawable which will contain the emoji already converted into a drawable.
      */
     lateinit var thumbDrawable: Drawable
+    val thumbGlow: Paint
 
     /**
      * Drawable which will contain the track: both the background with help from [colorTrack]
@@ -460,7 +460,7 @@ class EmojiSlider @JvmOverloads constructor(
 
 
     init {
-
+        this.setLayerType(LAYER_TYPE_SOFTWARE, null)
         val density = context.resources.displayMetrics.density
 
         desiredWidth = (56 * density * 4).toInt()
@@ -526,7 +526,8 @@ class EmojiSlider @JvmOverloads constructor(
             colorTrack = context.getColorCompat(R.color.slider_track)
             emoji = emoji
         }
-
+        thumbGlow = Paint()
+        thumbGlow.isAntiAlias = true
         mScaledTouchSlop = ViewConfiguration.get(context).scaledTouchSlop
     }
 
@@ -740,6 +741,11 @@ class EmojiSlider @JvmOverloads constructor(
         )
 
         thumbDrawable.updateDrawableBounds(widthPosition.roundToInt())
+
+        val paint = (thumbDrawable as TextDrawable).textPaint
+        paint.color = Color.WHITE;
+        paint.style = Paint.Style.FILL;
+        paint.setShadowLayer(30f, 0f, 0f, Color.RED)
         thumbDrawable.draw(canvas)
 
         canvas.restore()

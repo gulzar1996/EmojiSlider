@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipChildren="false"
     android:background="@color/md_grey_300">
 
 
@@ -11,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingLeft="8dp"
+        android:clipChildren="false"
         android:paddingRight="8dp">
 
         <LinearLayout
@@ -27,6 +29,7 @@
             android:orientation="vertical"
             android:paddingTop="8dp"
             android:paddingBottom="@dimen/slider_sticker_padding_bottom_with_question"
+            android:clipChildren="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
