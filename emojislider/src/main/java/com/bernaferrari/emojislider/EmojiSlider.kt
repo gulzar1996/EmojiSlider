@@ -175,34 +175,25 @@ class EmojiSlider @JvmOverloads constructor(
         }
 
 
-    //Progress with animation
-    val DURATION = 3000f
-
     private val floatPropertyAnimX = object : FloatPropertyCompat<Float>("") {
         override fun setValue(p: Float, value: Float) {
-            val r = value / DURATION
-            Log.d("ES", "setValue: p: ${p} v: ${r}")
-            progress = r
+            progress = value
         }
 
-        override fun getValue(progress: Float): Float {
-            Log.d("ES", "getValue: called with ${getPercent(progress)}")
-            return getPercent(progress)
-        }
-
+        override fun getValue(progress: Float) = progress
     }
 
     fun setProgressWithAnimation(newProgress: Float) {
-        SpringAnimation(progress, floatPropertyAnimX, getPercent(newProgress)).apply {
-            spring.stiffness = SpringForce.STIFFNESS_VERY_LOW
+        SpringAnimation(progress, floatPropertyAnimX, newProgress.limitToRange()).apply {
+            spring.stiffness = SpringForce.STIFFNESS_VERY_LOW / 1.5f
             spring.dampingRatio = SpringForce.DAMPING_RATIO_MEDIUM_BOUNCY
+            minimumVisibleChange = 0.001f
+            setMinValue(0f)
+            setMaxValue(1f)
             start()
         }
     }
 
-    fun getPercent(value: Float): Float {
-        return value.limitToRange() / 1f * DURATION
-    }
 
     /**
      * The track color - default is light-grey.

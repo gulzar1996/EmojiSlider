@@ -28,10 +28,10 @@ class Showcase : Fragment() {
 
         bt_increase.setOnClickListener {
             val currentProgress = sliderv4.progress
-            sliderv4.setProgressWithAnimation(currentProgress + (0.8).toFloat()) }
+            sliderv4.setProgressWithAnimation(currentProgress + (0.4).toFloat()) }
         bt_decrease.setOnClickListener {
             val currentProgress = sliderv4.progress
-            sliderv4.setProgressWithAnimation(currentProgress - (0.1).toFloat()) }
+            sliderv4.setProgressWithAnimation(currentProgress - (0.4).toFloat()) }
 
     }
 }
