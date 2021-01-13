@@ -19,9 +19,9 @@ import com.facebook.rebound.*
 import kotlin.math.roundToInt
 
 class EmojiSlider @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+        context: Context,
+        attrs: AttributeSet? = null,
+        defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
     private companion object {
@@ -170,6 +170,12 @@ class EmojiSlider @JvmOverloads constructor(
             invalidate()
         }
 
+
+    //Progress with animation
+    fun setProgressWithAnimation(progress: Float) {
+        
+    }
+
     /**
      * The track color - default is light-grey.
      */
@@ -278,14 +284,14 @@ class EmojiSlider @JvmOverloads constructor(
     }
 
     private val mThumbSpring = mSpringSystem.createSpring()
-        .origamiConfig(TENSION_SMALL, FRICTION_SMALL)
-        .setCurrentValue(1.0)
-        .setEndValue(1.0)
-        .setOvershootClampingEnabled(true)
+            .origamiConfig(TENSION_SMALL, FRICTION_SMALL)
+            .setCurrentValue(1.0)
+            .setEndValue(1.0)
+            .setOvershootClampingEnabled(true)
 
     private val mAverageSpring: Spring = mSpringSystem.createSpring()
-        .origamiConfig(TENSION_BIG, FRICTION_BIG)
-        .setCurrentValue(0.0)
+            .origamiConfig(TENSION_BIG, FRICTION_BIG)
+            .setCurrentValue(0.0)
 
     //////////////////////////////////////////
     // Measure methods
@@ -301,10 +307,10 @@ class EmojiSlider @JvmOverloads constructor(
         super.onSizeChanged(w, h, oldw, oldh)
 
         this.trackDrawable.setBounds(
-            0 + Math.max(paddingLeft, mThumbOffset),
-            h / 2 - trackDrawable.intrinsicHeight / 2,
-            w - Math.max(paddingRight, mThumbOffset),
-            h / 2 + trackDrawable.intrinsicHeight / 2
+                0 + Math.max(paddingLeft, mThumbOffset),
+                h / 2 - trackDrawable.intrinsicHeight / 2,
+                w - Math.max(paddingRight, mThumbOffset),
+                h / 2 + trackDrawable.intrinsicHeight / 2
         )
     }
 
@@ -383,11 +389,11 @@ class EmojiSlider @JvmOverloads constructor(
     fun showAverageTooltip() {
 
         val finalPosition = SpringUtil.mapValueFromRangeToRange(
-            (averageProgressValue * trackDrawable.bounds.width()).toDouble(),
-            0.0,
-            trackDrawable.bounds.width().toDouble(),
-            -(trackDrawable.bounds.width() / 2).toDouble(),
-            (trackDrawable.bounds.width() / 2).toDouble()
+                (averageProgressValue * trackDrawable.bounds.width()).toDouble(),
+                0.0,
+                trackDrawable.bounds.width().toDouble(),
+                -(trackDrawable.bounds.width() / 2).toDouble(),
+                (trackDrawable.bounds.width() / 2).toDouble()
         ).toInt()
 
         val rootView = View.inflate(context, R.layout.bubble, null) as BubbleTextView
@@ -534,7 +540,7 @@ class EmojiSlider @JvmOverloads constructor(
     //////////////////////////////////////////
 
     private fun TypedArray.getProgressGradientStartA(): Int {
-           return context.getColorCompat(R.color.slider_gradient_start_A)
+        return context.getColorCompat(R.color.slider_gradient_start_A)
     }
 
     private fun TypedArray.getProgressGradientStartB(): Int {
@@ -542,66 +548,66 @@ class EmojiSlider @JvmOverloads constructor(
     }
 
     private fun TypedArray.getProgressGradientEndA(): Int {
-        return  context.getColorCompat(R.color.slider_gradient_end_A)
+        return context.getColorCompat(R.color.slider_gradient_end_A)
     }
 
     private fun TypedArray.getProgressGradientEndB(): Int {
-        return  context.getColorCompat(R.color.slider_gradient_end_B)
+        return context.getColorCompat(R.color.slider_gradient_end_B)
     }
 
     private fun TypedArray.getSliderTrackColor(): Int {
         return this.getColor(
-            R.styleable.EmojiSlider_bar_track_color,
-            context.getColorCompat(R.color.slider_track)
+                R.styleable.EmojiSlider_bar_track_color,
+                context.getColorCompat(R.color.slider_track)
         )
     }
 
     private fun TypedArray.getProgress(): Float =
-        this.getFloat(R.styleable.EmojiSlider_progress_value, progress).limitToRange()
+            this.getFloat(R.styleable.EmojiSlider_progress_value, progress).limitToRange()
 
     private fun TypedArray.getEmoji(): String =
-        this.getString(R.styleable.EmojiSlider_emoji) ?: emoji
+            this.getString(R.styleable.EmojiSlider_emoji) ?: emoji
 
     private fun TypedArray.getEmojiGravity(): Int =
-        this.getInt(R.styleable.EmojiSlider_particle_direction, 0)
+            this.getInt(R.styleable.EmojiSlider_particle_direction, 0)
 
     private fun TypedArray.getThumbAllowScrollAnywhere(): Boolean =
-        this.getBoolean(
-            R.styleable.EmojiSlider_register_touches_outside_thumb, registerTouchOnTrack
-        )
+            this.getBoolean(
+                    R.styleable.EmojiSlider_register_touches_outside_thumb, registerTouchOnTrack
+            )
 
     private fun TypedArray.getAllowReselection(): Boolean =
-        this.getBoolean(R.styleable.EmojiSlider_allow_reselection, allowReselection)
+            this.getBoolean(R.styleable.EmojiSlider_allow_reselection, allowReselection)
 
     private fun TypedArray.getAverageProgress(): Float =
-        this.getFloat(R.styleable.EmojiSlider_average_progress, averageProgressValue).limitToRange()
+            this.getFloat(R.styleable.EmojiSlider_average_progress, averageProgressValue).limitToRange()
 
     private fun TypedArray.getIsTouchDisabled(): Boolean =
-        this.getBoolean(R.styleable.EmojiSlider_is_touch_disabled, isUserSeekable)
+            this.getBoolean(R.styleable.EmojiSlider_is_touch_disabled, isUserSeekable)
 
     private fun TypedArray.getShouldDisplayPopup(): Boolean =
-        this.getBoolean(R.styleable.EmojiSlider_should_display_tooltip, shouldDisplayTooltip)
+            this.getBoolean(R.styleable.EmojiSlider_should_display_tooltip, shouldDisplayTooltip)
 
     private fun TypedArray.getShouldDisplayAverage(): Boolean =
-        this.getBoolean(R.styleable.EmojiSlider_should_display_average, shouldDisplayAverage)
+            this.getBoolean(R.styleable.EmojiSlider_should_display_average, shouldDisplayAverage)
 
     private fun TypedArray.getShouldDisplayResultPicture(): Boolean =
-        this.getBoolean(
-            R.styleable.EmojiSlider_should_display_result_picture,
-            shouldDisplayResultPicture
-        )
+            this.getBoolean(
+                    R.styleable.EmojiSlider_should_display_result_picture,
+                    shouldDisplayResultPicture
+            )
 
     private fun TypedArray.getTooltipText(): String? =
-        this.getString(R.styleable.EmojiSlider_tooltip_text)
+            this.getString(R.styleable.EmojiSlider_tooltip_text)
 
     private fun TypedArray.getTooltipDismissTimer(): Int =
-        this.getInt(R.styleable.EmojiSlider_tooltip_dismiss_timer, tooltipAutoDismissTimer)
+            this.getInt(R.styleable.EmojiSlider_tooltip_dismiss_timer, tooltipAutoDismissTimer)
 
     private fun TypedArray.getThumbSizeWhenPressed(): Double =
-        this.getFloat(
-            R.styleable.EmojiSlider_thumb_size_percent_on_pressed,
-            thumbSizePercentWhenPressed.toFloat()
-        ).limitToRange().toDouble()
+            this.getFloat(
+                    R.styleable.EmojiSlider_thumb_size_percent_on_pressed,
+                    thumbSizePercentWhenPressed.toFloat()
+            ).limitToRange().toDouble()
 
 
     //////////////////////////////////////////
@@ -614,9 +620,9 @@ class EmojiSlider @JvmOverloads constructor(
         val (paddingLeft, paddingTop) = getPaddingForFloatingEmoji()
 
         floatingEmoji.onProgressChanged(
-            percent = progress,
-            paddingLeft = paddingLeft,
-            paddingTop = paddingTop
+                percent = progress,
+                paddingLeft = paddingLeft,
+                paddingTop = paddingTop
         )
     }
 
@@ -626,10 +632,10 @@ class EmojiSlider @JvmOverloads constructor(
         val (paddingLeft, paddingTop) = getPaddingForFloatingEmoji()
 
         floatingEmoji.progressStarted(
-            emoji = emoji,
-            direction = floatingEmojiDirection,
-            paddingLeft = paddingLeft,
-            paddingTop = paddingTop
+                emoji = emoji,
+                direction = floatingEmojiDirection,
+                paddingLeft = paddingLeft,
+                paddingTop = paddingTop
         )
     }
 
@@ -643,14 +649,14 @@ class EmojiSlider @JvmOverloads constructor(
         val widthPosition = progress * trackDrawable.bounds.width()
 
         return Pair(
-            sliderLocation[0].toFloat()
-                    + trackDrawable.bounds.left
-                    + widthPosition
-                    - particleLocation[0],
-            sliderLocation[1].toFloat()
-                    + trackDrawable.bounds.top
-                    + dpToPx(context, 32f)
-                    - particleLocation[1]
+                sliderLocation[0].toFloat()
+                        + trackDrawable.bounds.left
+                        + widthPosition
+                        - particleLocation[0],
+                sliderLocation[1].toFloat()
+                        + trackDrawable.bounds.top
+                        + dpToPx(context, 32f)
+                        - particleLocation[1]
         )
     }
 
@@ -660,9 +666,9 @@ class EmojiSlider @JvmOverloads constructor(
 
     private fun updateThumb(emoji: String) {
         thumbDrawable = textToDrawable(
-            context = this.context,
-            text = emoji,
-            size = R.dimen.slider_sticker_slider_handle_size
+                context = this.context,
+                text = emoji,
+                size = R.dimen.slider_sticker_slider_handle_size
         )
         thumbDrawable.callback = this
         invalidate()
@@ -682,10 +688,10 @@ class EmojiSlider @JvmOverloads constructor(
     private fun Float.limitToRange() = Math.max(Math.min(this, 1f), 0f)
 
     private fun Rect.containsXY(motionEvent: MotionEvent): Boolean =
-        this.contains(motionEvent.x.toInt(), motionEvent.y.toInt())
+            this.contains(motionEvent.x.toInt(), motionEvent.y.toInt())
 
     private fun Spring.origamiConfig(tension: Double, friction: Double): Spring =
-        this.setSpringConfig(SpringConfig.fromOrigamiTensionAndFriction(tension, friction))
+            this.setSpringConfig(SpringConfig.fromOrigamiTensionAndFriction(tension, friction))
 
     //////////////////////////////////////////
     // Draw methods
@@ -708,10 +714,10 @@ class EmojiSlider @JvmOverloads constructor(
         canvas.save()
         canvas.translate(trackDrawable.bounds.left.toFloat(), trackDrawable.bounds.top.toFloat())
         canvas.scale(
-            thumbScale,
-            thumbScale,
-            widthPosition,
-            (trackDrawable.bounds.bottom - trackDrawable.bounds.top) / 2f
+                thumbScale,
+                thumbScale,
+                widthPosition,
+                (trackDrawable.bounds.bottom - trackDrawable.bounds.top) / 2f
         )
 
         thumbDrawable.updateDrawableBounds(widthPosition.roundToInt())
@@ -737,9 +743,9 @@ class EmojiSlider @JvmOverloads constructor(
 
     private fun drawAverage(canvas: Canvas) {
         averageDrawable.outerColor = getCorrectColor(
-            colorStartA,
-            colorEndA,
-            averageProgressValue
+                colorStartA,
+                colorEndA,
+                averageProgressValue
         )
 
         // this will invalidate it in case the averageValue changes, so it updates the position
@@ -767,10 +773,10 @@ class EmojiSlider @JvmOverloads constructor(
         val heightPosition = trackDrawable.bounds.height() / 2
 
         this.setBounds(
-            widthPosition - customIntrinsicWidth,
-            heightPosition - customIntrinsicHeight,
-            widthPosition + customIntrinsicWidth,
-            heightPosition + customIntrinsicHeight
+                widthPosition - customIntrinsicWidth,
+                heightPosition - customIntrinsicHeight,
+                widthPosition + customIntrinsicWidth,
+                heightPosition + customIntrinsicHeight
         )
     }
 
@@ -878,7 +884,7 @@ class EmojiSlider @JvmOverloads constructor(
         val y = event.y.toInt() - trackDrawable.bounds.top
 
         if (!thumbDrawable.bounds.contains(x, y) &&
-            !(registerTouchOnTrack && trackDrawable.bounds.containsXY(event))
+                !(registerTouchOnTrack && trackDrawable.bounds.containsXY(event))
         ) return
 
         setViewPressed(true)

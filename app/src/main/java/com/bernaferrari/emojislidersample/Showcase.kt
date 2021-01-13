@@ -15,8 +15,8 @@ import kotlinx.android.synthetic.main.frag_main.*
 class Showcase : Fragment() {
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View = inflater.inflate(R.layout.frag_main, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -24,6 +24,9 @@ class Showcase : Fragment() {
 
 
         sliderv4.sliderParticleSystem = slider_particle_system
+
+        bt_increase.setOnClickListener { sliderv4.progress = sliderv4.progress + (0.1).toFloat() }
+        bt_decrease.setOnClickListener { sliderv4.progress = sliderv4.progress - (0.1).toFloat() }
 
     }
 }
