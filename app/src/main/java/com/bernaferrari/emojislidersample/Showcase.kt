@@ -20,7 +20,7 @@ class Showcase : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        sliderv4.sliderParticleSystem = slider_particle_system
+        //sliderv4.sliderParticleSystem = slider_particle_system
         sliderv4.setProgress(0f)
 
         bt_increase.setOnClickListener {

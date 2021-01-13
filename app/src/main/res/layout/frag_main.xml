@@ -19,17 +19,12 @@
             android:id="@+id/linearLayoutVertList2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-
             android:layout_marginLeft="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="16dp"
-
             android:background="@drawable/slider_sticker_background"
             android:orientation="vertical"
-            android:paddingTop="4dp"
-
-            android:paddingBottom="4dp"
             android:clipChildren="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -47,8 +42,8 @@
                 app:bar_progress_color_end="#536DFE"
                 app:bar_progress_color_start="#40C4FF"
                 app:emoji="😭"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
                 app:particle_direction="down"
                 app:progress_value="0.4"
                 app:register_touches_outside_thumb="false" />

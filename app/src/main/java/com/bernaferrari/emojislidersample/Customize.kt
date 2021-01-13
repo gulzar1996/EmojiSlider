@@ -40,7 +40,7 @@ class Customize : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        slider.sliderParticleSystem = slider_particle_system
+        //slider.sliderParticleSystem = slider_particle_system
 
         setUpRecyclerPicker()
         setUpRecyclerEmoji()
@@ -68,7 +68,6 @@ class Customize : Fragment() {
 
         resetButton.setOnClickListener {
             uiState.isValueSet = false
-            slider.resetAnimated()
         }
 
         averageSeekBar.doOnChanged { _, progress, _ ->
@@ -184,7 +183,6 @@ class Customize : Fragment() {
         slider.colorStartA = uiState.colorStart
         slider.colorEndA = uiState.colorEnd
 
-        slider.allowReselection = uiState.thumbAllowReselection
         thumbAllowReselection.isActivated = uiState.thumbAllowReselection
 
         slider.shouldDisplayAverage = uiState.showAverage
