@@ -359,7 +359,7 @@ class EmojiSlider @JvmOverloads constructor(
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val w = resolveSizeAndState(desiredWidth, widthMeasureSpec, 0)
-        val h = resolveSizeAndState(desiredHeight, heightMeasureSpec, 0)
+        val h = resolveSizeAndState(desiredHeight + paddingTop + paddingBottom, heightMeasureSpec, 0)
         setMeasuredDimension(w, h)
     }
 
@@ -787,7 +787,7 @@ class EmojiSlider @JvmOverloads constructor(
         val paint = (thumbDrawable as TextDrawable).textPaint
         paint.color = Color.WHITE;
         paint.style = Paint.Style.FILL;
-        paint.setShadowLayer(30f, 0f, 0f, Color.parseColor("#FF9800"))
+        paint.setShadowLayer(50f, 0f, 0f, Color.parseColor("#FF9800"))
         thumbDrawable.draw(canvas)
 
         canvas.restore()

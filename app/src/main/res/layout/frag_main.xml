@@ -27,9 +27,9 @@
 
             android:background="@drawable/slider_sticker_background"
             android:orientation="vertical"
-            android:paddingTop="8dp"
+            android:paddingTop="4dp"
 
-            android:paddingBottom="8dp"
+            android:paddingBottom="4dp"
             android:clipChildren="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -47,6 +47,8 @@
                 app:bar_progress_color_end="#536DFE"
                 app:bar_progress_color_start="#40C4FF"
                 app:emoji="😭"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 app:particle_direction="down"
                 app:progress_value="0.4"
                 app:register_touches_outside_thumb="false" />
