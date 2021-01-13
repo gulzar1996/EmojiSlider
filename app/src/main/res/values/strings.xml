@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Emoji Slider</string>
+    <string name="app_name" translatable="false"></string>
 
     <string name="up">Up</string>
     <string name="down">Down</string>

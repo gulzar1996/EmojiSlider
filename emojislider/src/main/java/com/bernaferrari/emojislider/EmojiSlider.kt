@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
+import androidx.dynamicanimation.animation.DynamicAnimation
 import androidx.dynamicanimation.animation.FloatPropertyCompat
 import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.dynamicanimation.animation.SpringForce
@@ -173,23 +174,63 @@ class EmojiSlider @JvmOverloads constructor(
             invalidate()
         }
 
+    var thumbProgress: Float = INITIAL_POSITION
+        set(value) {
+            field = value.limitToRange()
+            invalidate()
+        }
 
-    private val floatPropertyAnimX = object : FloatPropertyCompat<Float>("") {
+
+    private val progressAnimProperty = object : FloatPropertyCompat<Float>("") {
         override fun setValue(p: Float, value: Float) {
             progress = value
         }
 
-        override fun getValue(progress: Float) = progress
+        override fun getValue(p: Float) = progress
     }
 
-    fun setProgressWithAnimation(newProgress: Float) {
-        SpringAnimation(progress, floatPropertyAnimX, newProgress.limitToRange()).apply {
-            spring.stiffness = SpringForce.STIFFNESS_VERY_LOW / 1.5f
-            spring.dampingRatio = SpringForce.DAMPING_RATIO_MEDIUM_BOUNCY
+    private val thumbAnimProperty = object : FloatPropertyCompat<Float>("") {
+        override fun setValue(p: Float, value: Float) {
+            thumbProgress = value
+        }
+
+        override fun getValue(progress: Float) = thumbProgress
+    }
+
+    val STIFFNESS = 100f
+
+    val progressAnimation by lazy {
+        SpringAnimation(progress, progressAnimProperty, 0f).apply {
+            spring.stiffness = STIFFNESS
+            spring.dampingRatio = SpringForce.DAMPING_RATIO_LOW_BOUNCY
             minimumVisibleChange = 0.001f
             setMinValue(0f)
             setMaxValue(1f)
-            start()
+            addUpdateListener(thumbAnimationListener)
+        }
+    }
+
+    val thumbAnimation by lazy {
+        SpringAnimation(thumbProgress, thumbAnimProperty, 0f).apply {
+            spring.stiffness = STIFFNESS
+            spring.dampingRatio = SpringForce.DAMPING_RATIO_LOW_BOUNCY
+            minimumVisibleChange = 0.001f
+            setMinValue(0f)
+            setMaxValue(1f)
+        }
+    }
+
+    private val thumbAnimationListener = DynamicAnimation.OnAnimationUpdateListener { animation, value, velocity ->
+        thumbAnimation.animateToFinalPosition(value)
+    }
+
+
+    fun setProgress(newProgress: Float, isAnimation: Boolean = false) {
+        if (isAnimation)
+            progressAnimation.animateToFinalPosition(newProgress)
+        else {
+            progress = newProgress
+            thumbProgress = newProgress
         }
     }
 
@@ -485,6 +526,7 @@ class EmojiSlider @JvmOverloads constructor(
 
             try {
                 progress = array.getProgress()
+                thumbProgress = progress
 
                 colorStartA = array.getProgressGradientStartA()
                 colorEndA = array.getProgressGradientEndA()
@@ -728,7 +770,7 @@ class EmojiSlider @JvmOverloads constructor(
 
     private fun drawThumb(canvas: Canvas) {
 
-        val widthPosition = progress * trackDrawable.bounds.width()
+        val widthPosition = thumbProgress * trackDrawable.bounds.width()
         val thumbScale = mThumbSpring.currentValue.toFloat()
 
         canvas.save()
@@ -745,7 +787,7 @@ class EmojiSlider @JvmOverloads constructor(
         val paint = (thumbDrawable as TextDrawable).textPaint
         paint.color = Color.WHITE;
         paint.style = Paint.Style.FILL;
-        paint.setShadowLayer(30f, 0f, 0f, Color.RED)
+        paint.setShadowLayer(26f, 0f, 0f, Color.parseColor("#FF9800"))
         thumbDrawable.draw(canvas)
 
         canvas.restore()

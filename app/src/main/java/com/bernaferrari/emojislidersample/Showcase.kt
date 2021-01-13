@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.frag_main.*
+import java.util.*
 
 
 class Showcase : Fragment() {
@@ -20,19 +21,21 @@ class Showcase : Fragment() {
 
 
         sliderv4.sliderParticleSystem = slider_particle_system
-        sliderv4.progress = 0f
+        sliderv4.setProgress(0f)
 
         bt_increase.setOnClickListener {
-            val currentProgress = sliderv4.progress
-            sliderv4.setProgressWithAnimation((currentProgress + random()).toFloat())
+
+            val r = Math.max(Math.min(((random(0.0, 0.9)).toFloat()), 1f), 0f)
+            sliderv4.setProgress(r, true)
+            textView3.append("Random : $r\n")
         }
-        bt_decrease.setOnClickListener {
-            val currentProgress = sliderv4.progress
-            sliderv4.setProgressWithAnimation((currentProgress - random()).toFloat())
-        }
+
 
     }
 
-    fun random(): Double = (Math.random() * (0.5f)) as Double
+    fun random(min: Double, max: Double): Double {
+        val r = Random()
+        return (r.nextInt(((max - min) * 10 + 1).toInt()) + min * 10) / 10.0
+    }
 
 }
