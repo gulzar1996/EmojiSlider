@@ -98,7 +98,6 @@ class EmojiSlider @JvmOverloads constructor(
         SpringAnimation(thumbProgress, thumbAnimProperty, 0f).apply {
             spring.stiffness = SpringForce.STIFFNESS_LOW
             spring.dampingRatio = SpringForce.DAMPING_RATIO_NO_BOUNCY
-            minimumVisibleChange = 1f
             setMinValue(0f)
             setMaxValue(1f)
         }
