@@ -28,7 +28,8 @@
             android:background="@drawable/slider_sticker_background"
             android:orientation="vertical"
             android:paddingTop="8dp"
-            android:paddingBottom="@dimen/slider_sticker_padding_bottom_with_question"
+
+            android:paddingBottom="8dp"
             android:clipChildren="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
