@@ -31,7 +31,6 @@ class EmojiSlider @JvmOverloads constructor(
     private companion object {
         const val INITIAL_POSITION = 0.25f
         const val INITIAL_AVERAGE_POSITION = 0.5f
-        const val INITIAL_THUMB_SIZE_PERCENT_WHEN_PRESSED = 0.9
 
         const val INITIAL_AUTO_DISMISS_TIMER = 2500
 
@@ -45,66 +44,6 @@ class EmojiSlider @JvmOverloads constructor(
     private val desiredWidth: Int
     private val desiredHeight: Int
 
-
-
-
-
-    /**
-     * Useful to tell the state of the slider.
-     */
-    var isValueSelected = false
-
-
-
-    /**
-     * The average value which (unless disabled) will be displayed when a value is selected
-     *
-     * It is a Float, between 0.0f and 1.0f.
-     */
-    var averageProgressValue: Float = INITIAL_AVERAGE_POSITION
-
-    /**
-     * Should the profile picture (or any image) be shown when a value is selected, like on that
-     * famous app? Set it false to disable it.
-     */
-    var shouldDisplayResultPicture: Boolean = true
-
-    /**
-     * This controls whatever the average circle will appear when the final value
-     * is selected. If this is disabled, [shouldDisplayAverage]'s value will be ignored and the
-     * "Average value" tooltip will not be shown.
-     */
-    var shouldDisplayAverage: Boolean = true
-        set(value) {
-            field = value
-            invalidate()
-        }
-
-    /**
-     * This controls whatever the "Average value" tooltip will appear when the final value
-     * is selected. If [shouldDisplayAverage] is disabled, this will also be disabled, since it
-     * would make no sense otherwise.
-     */
-    var shouldDisplayTooltip: Boolean = true
-
-    /**
-     * Tooltip text ("Average value") is, by default, translated into 40 languages.
-     * You can, however, overwrite it with your own (possibly localized) string.
-     */
-    var tooltipText: String = ""
-
-    /**
-     * Timer in milliseconds to hide the tooltip after it is shown.
-     * Default is 2.5 seconds.
-     */
-    var tooltipAutoDismissTimer = INITIAL_AUTO_DISMISS_TIMER
-
-
-    /**
-     * When user lifts the finger, if [sliderParticleSystem] is not null, the emoji can fly either
-     * up or down. It is up by default, like on a famous social media app.
-     */
-    var floatingEmojiDirection: FloatingEmoji.Direction = FloatingEmoji.Direction.UP
 
     /**
      * The main characteristic from the [EmojiSlider]. There is no restriction, as long as it is
@@ -266,41 +205,6 @@ class EmojiSlider @JvmOverloads constructor(
     // Public callbacks
     //////////////////////////////////////////
 
-    /**
-     * Current position tracker. Receive current position, in range from `0.0f` to `1.0f`.
-     */
-    var positionListener: ((Float) -> Unit)? = null
-
-    /**
-     * Called on slider touch.
-     */
-    var startTrackingListener: (() -> Unit)? = null
-
-    /**
-     * Called when slider is released.
-     */
-    var stopTrackingListener: (() -> Unit)? = null
-
-    //////////////////////////////////////////
-    // Spring Methods from Facebook's Rebound
-    //////////////////////////////////////////
-
-    private val mSpringSystem = SpringSystem.create()
-    private val mSpringListener = object : SimpleSpringListener() {
-        override fun onSpringUpdate(spring: Spring?) {
-            invalidate()
-        }
-    }
-
-    private val mThumbSpring = mSpringSystem.createSpring()
-            .origamiConfig(TENSION_SMALL, FRICTION_SMALL)
-            .setCurrentValue(1.0)
-            .setEndValue(1.0)
-            .setOvershootClampingEnabled(true)
-
-    private val mAverageSpring: Spring = mSpringSystem.createSpring()
-            .origamiConfig(TENSION_BIG, FRICTION_BIG)
-            .setCurrentValue(0.0)
 
     //////////////////////////////////////////
     // Measure methods
@@ -327,56 +231,6 @@ class EmojiSlider @JvmOverloads constructor(
     // Select methods
     //////////////////////////////////////////
 
-
-
-
-    /**
-     * Finds out the correct position to show the tooltip and shows it.
-     */
-    fun showAverageTooltip() {
-
-        val finalPosition = SpringUtil.mapValueFromRangeToRange(
-                (averageProgressValue * trackDrawable.bounds.width()).toDouble(),
-                0.0,
-                trackDrawable.bounds.width().toDouble(),
-                -(trackDrawable.bounds.width() / 2).toDouble(),
-                (trackDrawable.bounds.width() / 2).toDouble()
-        ).toInt()
-
-        val rootView = View.inflate(context, R.layout.bubble, null) as BubbleTextView
-        if (tooltipText.isNotBlank()) {
-            rootView.text = tooltipText
-        }
-
-        val window = BernardoPopupWindow(rootView, rootView)
-        window.xPadding = finalPosition
-        window.yPadding = trackDrawable.bounds.top
-        window.setCancelOnTouch(true)
-        window.setCancelOnTouchOutside(true)
-        window.setCancelOnLater(tooltipAutoDismissTimer.toLong())
-        window.showArrowTo(this, BubbleStyle.ArrowDirection.Up)
-    }
-
-    //////////////////////////////////////////
-    // Lifecycle methods
-    //////////////////////////////////////////
-
-    /**
-     * This can be used with lifecycles to avoid any leaks.
-     */
-    fun startAnimation() {
-        mThumbSpring.addListener(mSpringListener)
-        mAverageSpring.addListener(mSpringListener)
-    }
-
-    /**
-     * Same as [startAnimation].
-     */
-    fun stopAnimation() {
-        mThumbSpring.removeListener(mSpringListener)
-        mAverageSpring.removeListener(mSpringListener)
-    }
-
     override fun scheduleDrawable(drawable: Drawable, runnable: Runnable, j: Long) = Unit
     override fun unscheduleDrawable(drawable: Drawable, runnable: Runnable) = Unit
     override fun invalidateDrawable(drawable: Drawable) = invalidate()
@@ -396,7 +250,7 @@ class EmojiSlider @JvmOverloads constructor(
                 (density * 8 + context.resources.getDimension(R.dimen.slider_sticker_slider_handle_size)).roundToInt()
         mThumbOffset = desiredHeight / 2
 
-        startAnimation()
+
 
         this.resultDrawable.callback = this
         this.averageDrawable.callback = this
@@ -421,24 +275,6 @@ class EmojiSlider @JvmOverloads constructor(
                 colorStartB = array.getProgressGradientStartB()
                 colorEndB = array.getProgressGradientEndB()
 
-
-                averageProgressValue = array.getAverageProgress()
-                shouldDisplayTooltip = array.getShouldDisplayPopup()
-                shouldDisplayAverage = array.getShouldDisplayAverage()
-                shouldDisplayResultPicture = array.getShouldDisplayResultPicture()
-                tooltipAutoDismissTimer = array.getTooltipDismissTimer()
-
-
-                floatingEmojiDirection = if (array.getEmojiGravity() == 0) {
-                    FloatingEmoji.Direction.UP
-                } else {
-                    FloatingEmoji.Direction.DOWN
-                }
-
-                array.getTooltipText()?.let {
-                    tooltipText = it
-                }
-
                 emoji = array.getEmoji()
 
                 invalidateAll()
@@ -459,9 +295,6 @@ class EmojiSlider @JvmOverloads constructor(
      * any invalidate problem brutally.
      */
     fun invalidateAll() {
-        if (shouldDisplayAverage) averageDrawable.invalidateSelf()
-        if (shouldDisplayResultPicture) resultDrawable.invalidateSelf()
-
         trackDrawable.invalidateSelf()
         thumbDrawable.invalidateSelf()
         invalidate()
@@ -498,47 +331,11 @@ class EmojiSlider @JvmOverloads constructor(
         return context.getColorCompat(R.color.slider_gradient_end_B)
     }
 
-    private fun TypedArray.getSliderTrackColor(): Int {
-        return this.getColor(
-                R.styleable.EmojiSlider_bar_track_color,
-                context.getColorCompat(R.color.slider_track)
-        )
-    }
-
     private fun TypedArray.getProgress(): Float =
             this.getFloat(R.styleable.EmojiSlider_progress_value, progress).limitToRange()
 
     private fun TypedArray.getEmoji(): String =
             this.getString(R.styleable.EmojiSlider_emoji) ?: emoji
-
-    private fun TypedArray.getEmojiGravity(): Int =
-            this.getInt(R.styleable.EmojiSlider_particle_direction, 0)
-
-
-
-
-    private fun TypedArray.getAverageProgress(): Float =
-            this.getFloat(R.styleable.EmojiSlider_average_progress, averageProgressValue).limitToRange()
-
-
-
-    private fun TypedArray.getShouldDisplayPopup(): Boolean =
-            this.getBoolean(R.styleable.EmojiSlider_should_display_tooltip, shouldDisplayTooltip)
-
-    private fun TypedArray.getShouldDisplayAverage(): Boolean =
-            this.getBoolean(R.styleable.EmojiSlider_should_display_average, shouldDisplayAverage)
-
-    private fun TypedArray.getShouldDisplayResultPicture(): Boolean =
-            this.getBoolean(
-                    R.styleable.EmojiSlider_should_display_result_picture,
-                    shouldDisplayResultPicture
-            )
-
-    private fun TypedArray.getTooltipText(): String? =
-            this.getString(R.styleable.EmojiSlider_tooltip_text)
-
-    private fun TypedArray.getTooltipDismissTimer(): Int =
-            this.getInt(R.styleable.EmojiSlider_tooltip_dismiss_timer, tooltipAutoDismissTimer)
 
 
 
@@ -570,8 +367,6 @@ class EmojiSlider @JvmOverloads constructor(
 
     private fun Float.limitToRange() = Math.max(Math.min(this, 1f), 0f)
 
-    private fun Spring.origamiConfig(tension: Double, friction: Double): Spring =
-            this.setSpringConfig(SpringConfig.fromOrigamiTensionAndFriction(tension, friction))
 
     //////////////////////////////////////////
     // Draw methods
@@ -589,7 +384,7 @@ class EmojiSlider @JvmOverloads constructor(
     private fun drawThumb(canvas: Canvas) {
 
         val widthPosition = thumbProgress * trackDrawable.bounds.width()
-        val thumbScale = mThumbSpring.currentValue.toFloat()
+        val thumbScale = 1f
 
         canvas.save()
         canvas.translate(trackDrawable.bounds.left.toFloat(), trackDrawable.bounds.top.toFloat())
@@ -627,23 +422,23 @@ class EmojiSlider @JvmOverloads constructor(
     }
 
     private fun drawAverage(canvas: Canvas) {
-        averageDrawable.outerColor = getCorrectColor(
-                colorStartA,
-                colorEndA,
-                averageProgressValue
-        )
+//        averageDrawable.outerColor = getCorrectColor(
+//                colorStartA,
+//                colorEndA,
+//                averageProgressValue
+//        )
 
         // this will invalidate it in case the averageValue changes, so it updates the position
         averageDrawable.invalidateSelf()
 
-        val scale = mAverageSpring.currentValue.toFloat()
+//        val scale = mAverageSpring.currentValue.toFloat()
 
-        val widthPosition = averageProgressValue * trackDrawable.bounds.width()
+        val widthPosition = progress * trackDrawable.bounds.width()
         val heightPosition = (trackDrawable.bounds.height() / 2).toFloat()
 
         canvas.save()
         canvas.translate(trackDrawable.bounds.left.toFloat(), trackDrawable.bounds.top.toFloat())
-        canvas.scale(scale, scale, widthPosition, heightPosition)
+//        canvas.scale(scale, scale, widthPosition, heightPosition)
 
         averageDrawable.updateDrawableBounds(widthPosition.roundToInt())
         averageDrawable.draw(canvas)

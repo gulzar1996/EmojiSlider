@@ -60,18 +60,13 @@ class Customize : Fragment() {
         shouldDisplayPicture.isActivated = true
         shouldDisplayPicture.setOnClickListener { uiState.showPicture++ }
 
-        slider.stopTrackingListener = {
-            if (!uiState.thumbAllowReselection) {
-                uiState.isValueSet = true
-            }
-        }
 
         resetButton.setOnClickListener {
             uiState.isValueSet = false
         }
 
         averageSeekBar.doOnChanged { _, progress, _ ->
-            slider.averageProgressValue = progress / 100f
+
         }
 
         updateUiFromState()
@@ -185,11 +180,11 @@ class Customize : Fragment() {
 
         thumbAllowReselection.isActivated = uiState.thumbAllowReselection
 
-        slider.shouldDisplayAverage = uiState.showAverage
+
         shouldShowAverage.isActivated = uiState.showAverage
         shouldShowAverage.isVisible = !thumbAllowReselection.isActivated
 
-        slider.shouldDisplayTooltip = uiState.showPopover && uiState.showAverage
+
         shouldDisplayPopup.isVisible = uiState.showAverage && !thumbAllowReselection.isActivated &&
                 !uiState.isValueSet
         shouldDisplayPopup.isActivated = uiState.showPopover
@@ -197,11 +192,7 @@ class Customize : Fragment() {
         controlUpToggle.isActivated = uiState.isFlyingDirectionUp
         controlDownToggle.isActivated = !uiState.isFlyingDirectionUp
 
-        if (uiState.isFlyingDirectionUp) {
-            slider.floatingEmojiDirection = FloatingEmoji.Direction.UP
-        } else {
-            slider.floatingEmojiDirection = FloatingEmoji.Direction.DOWN
-        }
+
 
         updateIsValueSet(uiState.isValueSet)
 
