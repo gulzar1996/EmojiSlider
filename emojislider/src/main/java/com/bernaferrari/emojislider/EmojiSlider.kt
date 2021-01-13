@@ -60,7 +60,7 @@ class EmojiSlider @JvmOverloads constructor(
     /**
      * If false, user won't be able to move the slider.
      */
-    var isUserSeekable = true
+    var isUserSeekable = false
 
     /**
      * Useful to tell the state of the slider.
@@ -219,6 +219,7 @@ class EmojiSlider @JvmOverloads constructor(
             setMaxValue(1f)
         }
     }
+
 
     private val thumbAnimationListener = DynamicAnimation.OnAnimationUpdateListener { animation, value, velocity ->
         thumbAnimation.animateToFinalPosition(value)
