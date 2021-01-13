@@ -24,9 +24,14 @@ class Showcase : Fragment() {
 
 
         sliderv4.sliderParticleSystem = slider_particle_system
+        sliderv4.progress = 0f
 
-        bt_increase.setOnClickListener { sliderv4.progress = sliderv4.progress + (0.1).toFloat() }
-        bt_decrease.setOnClickListener { sliderv4.progress = sliderv4.progress - (0.1).toFloat() }
+        bt_increase.setOnClickListener {
+            val currentProgress = sliderv4.progress
+            sliderv4.setProgressWithAnimation(currentProgress + (0.8).toFloat()) }
+        bt_decrease.setOnClickListener {
+            val currentProgress = sliderv4.progress
+            sliderv4.setProgressWithAnimation(currentProgress - (0.1).toFloat()) }
 
     }
 }

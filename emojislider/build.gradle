@@ -53,6 +53,7 @@ dependencies {
     implementation 'com.facebook.rebound:rebound:0.3.8'
     implementation 'com.cpiz.bubbleview:bubbleview:1.0.2'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "androidx.dynamicanimation:dynamicanimation:1.0.0"
 
     testImplementation 'junit:junit:4.13'
 }

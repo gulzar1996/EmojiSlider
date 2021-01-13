@@ -7,9 +7,13 @@ import android.graphics.Canvas
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
+import androidx.dynamicanimation.animation.FloatPropertyCompat
+import androidx.dynamicanimation.animation.SpringAnimation
+import androidx.dynamicanimation.animation.SpringForce
 import com.bernaferrari.emojislider.drawables.CircleDrawable
 import com.bernaferrari.emojislider.drawables.ResultDrawable
 import com.bernaferrari.emojislider.drawables.TrackDrawable
@@ -172,8 +176,32 @@ class EmojiSlider @JvmOverloads constructor(
 
 
     //Progress with animation
-    fun setProgressWithAnimation(progress: Float) {
-        
+    val DURATION = 3000f
+
+    private val floatPropertyAnimX = object : FloatPropertyCompat<Float>("") {
+        override fun setValue(p: Float, value: Float) {
+            val r = value / DURATION
+            Log.d("ES", "setValue: p: ${p} v: ${r}")
+            progress = r
+        }
+
+        override fun getValue(progress: Float): Float {
+            Log.d("ES", "getValue: called with ${getPercent(progress)}")
+            return getPercent(progress)
+        }
+
+    }
+
+    fun setProgressWithAnimation(newProgress: Float) {
+        SpringAnimation(progress, floatPropertyAnimX, getPercent(newProgress)).apply {
+            spring.stiffness = SpringForce.STIFFNESS_VERY_LOW
+            spring.dampingRatio = SpringForce.DAMPING_RATIO_MEDIUM_BOUNCY
+            start()
+        }
+    }
+
+    fun getPercent(value: Float): Float {
+        return value.limitToRange() / 1f * DURATION
     }
 
     /**
