@@ -1,60 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/md_grey_300">
 
-    <ScrollView
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_horizontal">
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp">
+        <LinearLayout
+            android:id="@+id/linearLayoutVertList2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
 
-            <LinearLayout
-                android:id="@+id/linearLayoutVertList2"
-                android:layout_width="0dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="16dp"
+
+            android:background="@drawable/slider_sticker_background"
+            android:orientation="vertical"
+            android:paddingTop="8dp"
+            android:paddingBottom="@dimen/slider_sticker_padding_bottom_with_question"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+
+            <com.bernaferrari.emojislider.EmojiSlider
+                android:id="@+id/sliderv4"
+                style="@style/sliderStyle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="16dp"
-
-                android:background="@drawable/slider_sticker_background"
-                android:orientation="vertical"
-                android:paddingTop="8dp"
-                android:paddingBottom="@dimen/slider_sticker_padding_bottom_with_question"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:allow_reselection="true"
+                app:bar_progress_color_end="#536DFE"
+                app:bar_progress_color_start="#40C4FF"
+                app:emoji="😭"
+                app:particle_direction="down"
+                app:progress_value="0.4"
+                app:register_touches_outside_thumb="false" />
 
 
-                <com.bernaferrari.emojislider.EmojiSlider
-                    android:id="@+id/sliderv4"
-                    style="@style/sliderStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:allow_reselection="true"
-                    app:bar_progress_color_end="#536DFE"
-                    app:bar_progress_color_start="#40C4FF"
-                    app:emoji="😭"
-                    app:particle_direction="down"
-                    app:progress_value="0.4"
-                    app:register_touches_outside_thumb="false" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/bt_decrease"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Decrease"
+            app:layout_constraintEnd_toStartOf="@+id/bt_increase"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayoutVertList2" />
+
+        <Button
+            android:id="@+id/bt_increase"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="Increase"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/bt_decrease"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayoutVertList2" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-            </LinearLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </ScrollView>
 
     <View
         android:id="@+id/slider_particle_system"
