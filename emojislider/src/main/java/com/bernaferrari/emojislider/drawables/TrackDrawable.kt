@@ -66,10 +66,10 @@ class TrackDrawable : GenericDrawableCallback() {
 
     private fun updateShader(rect: RectF, progressGradient: Paint, colorS: Int, colorE: Int) {
         progressGradient.shader = LinearGradient(
-                0.0f,
-                rect.centerX(),
-                rect.width().toFloat(),
-                rect.centerY(),
+                rect.left,
+                rect.top,
+                rect.right,
+                rect.bottom,
                 colorS,
                 colorE,
                 TileMode.CLAMP
