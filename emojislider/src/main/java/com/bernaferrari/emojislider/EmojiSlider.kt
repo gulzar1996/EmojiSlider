@@ -1,22 +1,25 @@
 package com.bernaferrari.emojislider
 
-import android.animation.ValueAnimator.AnimatorUpdateListener
 import android.content.Context
 import android.content.res.TypedArray
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.util.AttributeSet
 import android.view.View
+import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.dynamicanimation.animation.DynamicAnimation
 import androidx.dynamicanimation.animation.FloatPropertyCompat
 import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.dynamicanimation.animation.SpringForce
 import com.airbnb.lottie.LottieCompositionFactory
 import com.airbnb.lottie.LottieDrawable
-import com.bernaferrari.emojislider.drawables.CircleDrawable
-import com.bernaferrari.emojislider.drawables.ResultDrawable
-import com.bernaferrari.emojislider.drawables.TextDrawable
-import com.bernaferrari.emojislider.drawables.TrackDrawable
+import com.bernaferrari.emojislider.drawables.*
 import kotlin.math.roundToInt
 
 
@@ -37,26 +40,15 @@ class EmojiSlider @JvmOverloads constructor(
 
     private val debugPaint: Paint
 
-
-    /**
-     * The main characteristic from the [EmojiSlider]. There is no restriction, as long as it is
-     * a text. It actually can be anything - even a text with multiple chars, the convert text
-     * to drawable process works flawless.
-     */
     var emoji = "😍"
         set(value) {
             field = value
             updateThumb(field)
         }
 
-
-    /**
-     * Initial position of progress in range form `0.0` to `1.0`.
-     */
     var progress: Float = INITIAL_POSITION
         set(value) {
             field = value.limitToRange()
-
             trackDrawable.percentProgress = field
             trackDrawable.invalidateSelf()
             invalidate()
@@ -85,7 +77,6 @@ class EmojiSlider @JvmOverloads constructor(
         override fun getValue(progress: Float) = thumbProgress
     }
 
-    val STIFFNESS = 100f
     private val mThumbOffset: Int
 
     val progressAnimation by lazy {
@@ -113,12 +104,8 @@ class EmojiSlider @JvmOverloads constructor(
         thumbAnimation.animateToFinalPosition(value)
     }
 
-
     fun setProgress(newProgress: Float, isAnimation: Boolean = false) {
         if (isAnimation) {
-//            progressAnimation.skipToEnd()
-//            thumbAnimation.skipToEnd()
-            progressAnimation.cancel()
             progressAnimation.animateToFinalPosition(newProgress)
         } else {
             progress = newProgress
@@ -126,83 +113,33 @@ class EmojiSlider @JvmOverloads constructor(
         }
     }
 
-
-    /*
-        A - B
-     */
-
-    //Color A
-    /**
-     * The track progress color for the left side of the slider - default is purple.
-     */
     var colorStartA: Int
         get() = trackDrawable.colorStartA
         set(value) {
             trackDrawable.colorStartA = value
         }
-
-    /**
-     * The track progress color for the right side of the slider - default is red.
-     */
     var colorEndA: Int
         get() = trackDrawable.colorEndA
         set(value) {
             trackDrawable.colorEndA = value
         }
-
-
-    //COLOR B
-    /**
-     * The track progress color for the left side of the slider - default is purple.
-     */
     var colorStartB: Int
         get() = trackDrawable.colorStartB
         set(value) {
             trackDrawable.colorStartB = value
         }
-
-    /**
-     * The track progress color for the right side of the slider - default is red.
-     */
     var colorEndB: Int
         get() = trackDrawable.colorEndB
         set(value) {
             trackDrawable.colorEndB = value
         }
 
-    //////////////////////////////////////////
-    // Drawables
-    //////////////////////////////////////////
 
-    /**
-     * Drawable which will contain the emoji already converted into a drawable.
-     */
     lateinit var thumbDrawable: Drawable
-
-    /**
-     * Drawable which will contain the track: both the background with help from [colorTrack]
-     * and the progress by mixing together [colorStartA] and [colorEndA]
-     */
     val trackDrawable: TrackDrawable = TrackDrawable()
-
-    /**
-     * Drawable which displays the average's small round circle with a small ring around.
-     */
     val averageDrawable: CircleDrawable = CircleDrawable(context)
-
-    /**
-     * Drawable which displays the result's big round circle with a bitmap (if any) or a big circle.
-     */
     val resultDrawable: ResultDrawable = ResultDrawable(context)
 
-    //////////////////////////////////////////
-    // Public callbacks
-    //////////////////////////////////////////
-
-
-    //////////////////////////////////////////
-    // Measure methods
-    //////////////////////////////////////////
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val w = resolveSizeAndState(desiredWidth, widthMeasureSpec, 0)
@@ -220,10 +157,6 @@ class EmojiSlider @JvmOverloads constructor(
                 h / 2 + trackDrawable.intrinsicHeight / 2
         )
     }
-
-    //////////////////////////////////////////
-    // Select methods
-    //////////////////////////////////////////
 
     override fun scheduleDrawable(drawable: Drawable, runnable: Runnable, j: Long) = Unit
     override fun unscheduleDrawable(drawable: Drawable, runnable: Runnable) = Unit
@@ -252,10 +185,11 @@ class EmojiSlider @JvmOverloads constructor(
         this.starLottie.callback = this
 
         setResultHandleSize(context.resources.getDimensionPixelSize(R.dimen.slider_sticker_slider_handle_size))
-        trackDrawable.totalHeight =
-                context.resources.getDimensionPixelSize(R.dimen.slider_sticker_slider_height)
+        trackDrawable.totalHeight = context.resources.getDimensionPixelSize(R.dimen.slider_sticker_slider_height)
         trackDrawable.setTrackHeight(context.resources.getDimension(R.dimen.slider_sticker_slider_track_height))
         trackDrawable.invalidateSelf()
+
+        setResultDrawable(getBitmapFromVectorDrawable(context, R.drawable.thunder))
 
         debugPaint = Paint()
         debugPaint.color = Color.BLACK
@@ -264,6 +198,7 @@ class EmojiSlider @JvmOverloads constructor(
         starLottie.enableMergePathsForKitKatAndAbove(true)
         val result = LottieCompositionFactory.fromAssetSync(getContext().applicationContext, "stars_winner.json")
         starLottie.composition = result.value
+        starLottie.speed = 1.8f
         starLottie.repeatCount = LottieDrawable.INFINITE
         starLottie.addAnimatorUpdateListener { invalidate() }
         starLottie.start()
@@ -275,11 +210,11 @@ class EmojiSlider @JvmOverloads constructor(
                 progress = array.getProgress()
                 thumbProgress = progress
 
-                colorStartA = array.getProgressGradientStartA()
-                colorEndA = array.getProgressGradientEndA()
+                colorStartA = context.getColorCompat(R.color.slider_gradient_start_A)
+                colorEndA = context.getColorCompat(R.color.slider_gradient_end_A)
 
-                colorStartB = array.getProgressGradientStartB()
-                colorEndB = array.getProgressGradientEndB()
+                colorStartB = context.getColorCompat(R.color.slider_gradient_start_B)
+                colorEndB = context.getColorCompat(R.color.slider_gradient_end_B)
 
                 emoji = array.getEmoji()
 
@@ -296,21 +231,12 @@ class EmojiSlider @JvmOverloads constructor(
 
     }
 
-    /**
-     * Invalidate all drawables with a hammer. There are so many things happening on screen, this solves
-     * any invalidate problem brutally.
-     */
     fun invalidateAll() {
         trackDrawable.invalidateSelf()
         thumbDrawable.invalidateSelf()
         invalidate()
     }
 
-    /**
-     * Sets the [resultDrawable]'s size
-     *
-     * @param size is the diameter in pixels
-     */
     fun setResultHandleSize(size: Int) {
         resultDrawable.sizeHandle = size.toFloat()
         resultDrawable.imageDrawable.invalidateSelf()
@@ -320,22 +246,6 @@ class EmojiSlider @JvmOverloads constructor(
     //////////////////////////////////////////
     // PRIVATE GET METHODS
     //////////////////////////////////////////
-
-    private fun TypedArray.getProgressGradientStartA(): Int {
-        return context.getColorCompat(R.color.slider_gradient_start_A)
-    }
-
-    private fun TypedArray.getProgressGradientStartB(): Int {
-        return context.getColorCompat(R.color.slider_gradient_start_B)
-    }
-
-    private fun TypedArray.getProgressGradientEndA(): Int {
-        return context.getColorCompat(R.color.slider_gradient_end_A)
-    }
-
-    private fun TypedArray.getProgressGradientEndB(): Int {
-        return context.getColorCompat(R.color.slider_gradient_end_B)
-    }
 
     private fun TypedArray.getProgress(): Float =
             this.getFloat(R.styleable.EmojiSlider_progress_value, progress).limitToRange()
@@ -382,6 +292,7 @@ class EmojiSlider @JvmOverloads constructor(
         trackDrawable.draw(canvas)
         //if (shouldDisplayAverage) drawAverage(canvas)
         drawThumb(canvas)
+        //drawProfilePicture(canvas)
         //if (shouldDisplayResultPicture) drawProfilePicture(canvas)
         drawStar(canvas)
     }
@@ -415,17 +326,11 @@ class EmojiSlider @JvmOverloads constructor(
 
         val widthPosition = thumbProgress * trackDrawable.bounds.width()
 
-        val left = if (widthPosition == 0f) (trackDrawable.bounds.left.toFloat() - starLottie.intrinsicWidth / 2) else widthPosition
         val thumbScale = 1f
+        starLottie.scale = thumbScale
+        val left = widthPosition - starLottie.intrinsicWidth / 7
         canvas.save()
-        canvas.translate(left, trackDrawable.bounds.top.toFloat())
-        starLottie.scale = 0.1f
-        canvas.scale(
-                thumbScale,
-                thumbScale,
-                widthPosition,
-                starLottie.intrinsicHeight / 2f
-        )
+        canvas.translate(left, trackDrawable.bounds.top.toFloat() - starLottie.intrinsicHeight / 9f)
         starLottie.draw(canvas)
         canvas.restore()
     }
@@ -439,33 +344,9 @@ class EmojiSlider @JvmOverloads constructor(
         canvas.translate(trackDrawable.bounds.left.toFloat(), trackDrawable.bounds.top.toFloat())
         canvas.scale(1f, 1f, widthPosition, height)
 
-        resultDrawable.updateDrawableBounds(widthPosition.roundToInt())
+        //resultDrawable.updateDrawableBounds(widthPosition.roundToInt())
+        canvas.drawRect(resultDrawable.bounds, debugPaint)
         resultDrawable.draw(canvas)
-
-        canvas.restore()
-    }
-
-    private fun drawAverage(canvas: Canvas) {
-//        averageDrawable.outerColor = getCorrectColor(
-//                colorStartA,
-//                colorEndA,
-//                averageProgressValue
-//        )
-
-        // this will invalidate it in case the averageValue changes, so it updates the position
-        averageDrawable.invalidateSelf()
-
-//        val scale = mAverageSpring.currentValue.toFloat()
-
-        val widthPosition = progress * trackDrawable.bounds.width()
-        val heightPosition = (trackDrawable.bounds.height() / 2).toFloat()
-
-        canvas.save()
-        canvas.translate(trackDrawable.bounds.left.toFloat(), trackDrawable.bounds.top.toFloat())
-//        canvas.scale(scale, scale, widthPosition, heightPosition)
-
-        averageDrawable.updateDrawableBounds(widthPosition.roundToInt())
-        averageDrawable.draw(canvas)
 
         canvas.restore()
     }
@@ -483,6 +364,19 @@ class EmojiSlider @JvmOverloads constructor(
                 widthPosition + customIntrinsicWidth,
                 heightPosition + customIntrinsicHeight
         )
+    }
+
+    fun getBitmapFromVectorDrawable(context: Context, @DrawableRes drawableId: Int): Bitmap {
+        var drawable: Drawable = ContextCompat.getDrawable(context, drawableId)!!
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            drawable = DrawableCompat.wrap(drawable).mutate()
+        }
+        val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth,
+                drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        drawable.setBounds(0, 0, canvas.width, canvas.height)
+        drawable.draw(canvas)
+        return bitmap
     }
 
 }

@@ -57,23 +57,6 @@ class ResultDrawable(context: Context) : GenericDrawableCallback() {
             invalidateSelf()
         }
 
-    override fun draw(canvas: Canvas) {
-        val drawable = when (imageDrawable.drawable) {
-            null -> circleDrawable
-            else -> imageDrawable
-        }
-
-        val intrinsicWidth = (this.sizeHandle - drawable.intrinsicWidth.toFloat()) / 2.0f
-        val intrinsicHeight = (this.sizeHandle - drawable.intrinsicHeight.toFloat()) / 2.0f
-        val scale = profileSpring.currentValue.toFloat()
-
-        canvas.save()
-        canvas.translate(intrinsicWidth, intrinsicHeight)
-        canvas.scale(scale, scale, bounds.exactCenterX(), bounds.exactCenterY())
-        drawable.draw(canvas)
-        canvas.restore()
-    }
-
     override fun getIntrinsicHeight(): Int = sizeHandle.toInt()
 
     override fun getIntrinsicWidth(): Int = sizeHandle.toInt()

@@ -201,7 +201,7 @@ class Customize : Fragment() {
         if (uiState.showPicture) {
             showBitmapFromGlide()
         } else {
-            slider.resultDrawable.imageDrawable.drawable = null
+           // slider.resultDrawable.imageDrawable.drawable = null
         }
     }
 
