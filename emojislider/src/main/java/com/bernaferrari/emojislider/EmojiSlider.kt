@@ -82,7 +82,7 @@ class EmojiSlider @JvmOverloads constructor(
     val progressAnimation by lazy {
         SpringAnimation(progress, progressAnimProperty, 0f).apply {
             spring.stiffness = SpringForce.STIFFNESS_LOW
-            spring.dampingRatio = SpringForce.DAMPING_RATIO_NO_BOUNCY
+            spring.dampingRatio = 0.55f
             minimumVisibleChange = 0.001f
             setMinValue(0f)
             setMaxValue(1f)
@@ -93,7 +93,6 @@ class EmojiSlider @JvmOverloads constructor(
     val thumbAnimation by lazy {
         SpringAnimation(thumbProgress, thumbAnimProperty, 0f).apply {
             spring.stiffness = SpringForce.STIFFNESS_LOW
-            spring.dampingRatio = SpringForce.DAMPING_RATIO_NO_BOUNCY
             setMinValue(0f)
             setMaxValue(1f)
         }
@@ -198,7 +197,7 @@ class EmojiSlider @JvmOverloads constructor(
         starLottie.enableMergePathsForKitKatAndAbove(true)
         val result = LottieCompositionFactory.fromAssetSync(getContext().applicationContext, "stars_winner.json")
         starLottie.composition = result.value
-        starLottie.speed = 1.8f
+        starLottie.speed = 1.2f
         starLottie.repeatCount = LottieDrawable.INFINITE
         starLottie.addAnimatorUpdateListener { invalidate() }
         starLottie.start()
