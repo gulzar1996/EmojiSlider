@@ -2,10 +2,7 @@ package com.bernaferrari.emojislider
 
 import android.content.Context
 import android.content.res.TypedArray
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
+import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.AttributeSet
@@ -269,6 +266,13 @@ class EmojiSlider @JvmOverloads constructor(
     private fun updateThumb(emoji: String) {
         thumbDrawable = resources.getDrawable(R.drawable.lightning, null)
 
+        val bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.lightning)
+
+
+
+
+
+
         getResources().getDrawable(R.drawable.lightning, null);
         thumbDrawable.callback = this
         invalidate()
@@ -306,22 +310,21 @@ class EmojiSlider @JvmOverloads constructor(
 
     private fun drawThumb(canvas: Canvas) {
 
-        val widthPosition = thumbProgress * trackDrawable.bounds.width()
-        val thumbScale = 1f
+        val thunderIconBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.lightning)
+        val x = thumbProgress * trackDrawable.bounds.width() + trackDrawable.bounds.left - thunderIconBitmap.width / 2f
+        val y = trackDrawable.bounds.top.toFloat() - trackDrawable.trackHeight / 2 + thunderIconBitmap.height / 2
 
         canvas.save()
-        canvas.translate(trackDrawable.bounds.left.toFloat(), trackDrawable.bounds.top.toFloat())
-        canvas.scale(
-                thumbScale,
-                thumbScale,
-                widthPosition,
-                (trackDrawable.bounds.bottom - trackDrawable.bounds.top) / 2f
-        )
+        canvas.translate(x, y)
 
-        thumbDrawable.updateDrawableBounds(widthPosition.roundToInt())
 
-        canvas.drawRect(thumbDrawable.bounds, glowPaint)
-        thumbDrawable.draw(canvas)
+        //thumbDrawable.updateDrawableBounds(widthPosition.roundToInt())
+
+        //canvas.drawRect(thumbDrawable.bounds, glowPaint)
+        //thumbDrawable.draw(canvas)
+
+
+        canvas.drawBitmap(thunderIconBitmap, 0f, 0f, null)
 
         canvas.restore()
     }
