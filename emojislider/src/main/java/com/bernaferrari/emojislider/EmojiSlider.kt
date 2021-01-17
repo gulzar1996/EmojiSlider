@@ -39,6 +39,7 @@ class EmojiSlider @JvmOverloads constructor(
     private val starLottie: LottieDrawable
 
     private val debugPaint: Paint
+    private val glowPaint: Paint
 
     var emoji = "😍"
         set(value) {
@@ -195,6 +196,13 @@ class EmojiSlider @JvmOverloads constructor(
         debugPaint.color = Color.BLACK
         debugPaint.style = Paint.Style.STROKE
 
+        glowPaint = Paint().apply {
+            color = Color.WHITE;
+            style = Paint.Style.FILL;
+            setShadowLayer(45f, 0f, 0f, Color.parseColor("#FF9800"))
+        }
+
+
         starLottie.enableMergePathsForKitKatAndAbove(true)
         val result = LottieCompositionFactory.fromAssetSync(getContext().applicationContext, "stars_winner.json")
         starLottie.composition = result.value
@@ -259,11 +267,9 @@ class EmojiSlider @JvmOverloads constructor(
     //////////////////////////////////////////
 
     private fun updateThumb(emoji: String) {
-        thumbDrawable = textToDrawable(
-                context = this.context,
-                text = emoji,
-                size = R.dimen.slider_sticker_slider_handle_size
-        )
+        thumbDrawable = resources.getDrawable(R.drawable.lightning, null)
+
+        getResources().getDrawable(R.drawable.lightning, null);
         thumbDrawable.callback = this
         invalidate()
     }
@@ -291,16 +297,17 @@ class EmojiSlider @JvmOverloads constructor(
 
         trackDrawable.draw(canvas)
         //if (shouldDisplayAverage) drawAverage(canvas)
+        drawStar(canvas)
         drawThumb(canvas)
         //drawProfilePicture(canvas)
         //if (shouldDisplayResultPicture) drawProfilePicture(canvas)
-        drawStar(canvas)
+
     }
 
     private fun drawThumb(canvas: Canvas) {
 
         val widthPosition = thumbProgress * trackDrawable.bounds.width()
-        val thumbScale = 0.7f
+        val thumbScale = 1f
 
         canvas.save()
         canvas.translate(trackDrawable.bounds.left.toFloat(), trackDrawable.bounds.top.toFloat())
@@ -313,10 +320,7 @@ class EmojiSlider @JvmOverloads constructor(
 
         thumbDrawable.updateDrawableBounds(widthPosition.roundToInt())
 
-        val paint = (thumbDrawable as TextDrawable).textPaint
-        paint.color = Color.WHITE;
-        paint.style = Paint.Style.FILL;
-        paint.setShadowLayer(45f, 0f, 0f, Color.parseColor("#FF9800"))
+        canvas.drawRect(thumbDrawable.bounds, glowPaint)
         thumbDrawable.draw(canvas)
 
         canvas.restore()
@@ -326,11 +330,11 @@ class EmojiSlider @JvmOverloads constructor(
 
         val widthPosition = thumbProgress * trackDrawable.bounds.width()
 
-        val thumbScale = 1f
+        val thumbScale = 0.6f
         starLottie.scale = thumbScale
-        val left = widthPosition - starLottie.intrinsicWidth / 7
+        val left = widthPosition + starLottie.intrinsicWidth / 7f
         canvas.save()
-        canvas.translate(left, trackDrawable.bounds.top.toFloat() - starLottie.intrinsicHeight / 9f)
+        canvas.translate(left, trackDrawable.bounds.top.toFloat() + starLottie.intrinsicHeight / 9f)
         starLottie.draw(canvas)
         canvas.restore()
     }

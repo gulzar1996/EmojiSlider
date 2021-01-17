@@ -24,7 +24,7 @@ class UnscaledBitmapDrawable(private val bitmap: Bitmap) : Drawable() {
         } else if (rect.height() < rect.width()) {
             rect.inset((rect.width() - rect.height()) / 2.0f, 0.0f)
         }
-        canvas.drawOval(rect, paint)
+        //canvas.drawOval(rect, paint)
     }
 
     override fun getOpacity(): Int = PixelFormat.TRANSLUCENT

@@ -1,10 +1,14 @@
 package com.bernaferrari.emojislidersample
 
+import android.graphics.BitmapFactory
+import android.graphics.Shader
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.bernaferrari.emojislider.exp.TileDrawable
 import kotlinx.android.synthetic.main.frag_main.*
 import java.util.*
 
@@ -30,6 +34,7 @@ class Showcase : Fragment() {
             textView3.append("Random : $r\n")
         }
 
+        tileDrawable.setImageBitmap(BitmapFactory.decodeResource(requireContext().getResources(), R.drawable.lightning))
 
     }
 
