@@ -83,7 +83,7 @@ class EmojiSlider @JvmOverloads constructor(
         SpringAnimation(progress, progressAnimProperty, 0f).apply {
             spring.stiffness = SpringForce.STIFFNESS_LOW
             spring.dampingRatio = 0.55f
-            minimumVisibleChange = 0.001f
+            minimumVisibleChange = 1f / trackDrawable.bounds.width()
             setMinValue(0f)
             setMaxValue(1f)
             addUpdateListener(thumbAnimationListener)
@@ -105,6 +105,7 @@ class EmojiSlider @JvmOverloads constructor(
 
     fun setProgress(newProgress: Float, isAnimation: Boolean = false) {
         if (isAnimation) {
+            progressAnimation.canSkipToEnd()
             progressAnimation.animateToFinalPosition(newProgress)
         } else {
             progress = newProgress
