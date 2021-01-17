@@ -1,8 +1,10 @@
 package com.bernaferrari.emojislider
 
+import android.R.attr.src
 import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.*
+import android.graphics.BlurMaskFilter.Blur
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.AttributeSet
@@ -16,7 +18,9 @@ import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.dynamicanimation.animation.SpringForce
 import com.airbnb.lottie.LottieCompositionFactory
 import com.airbnb.lottie.LottieDrawable
-import com.bernaferrari.emojislider.drawables.*
+import com.bernaferrari.emojislider.drawables.CircleDrawable
+import com.bernaferrari.emojislider.drawables.ResultDrawable
+import com.bernaferrari.emojislider.drawables.TrackDrawable
 import kotlin.math.roundToInt
 
 
@@ -311,20 +315,20 @@ class EmojiSlider @JvmOverloads constructor(
     private fun drawThumb(canvas: Canvas) {
 
         val thunderIconBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.lightning)
+        val alpha: Bitmap = thunderIconBitmap.extractAlpha()
+
+        val paint = Paint()
+        paint.color = Color.parseColor("#FF9800")
+        paint.maskFilter = BlurMaskFilter(35f, Blur.OUTER)
+
         val x = thumbProgress * trackDrawable.bounds.width() + trackDrawable.bounds.left - thunderIconBitmap.width / 2f
         val y = trackDrawable.bounds.top.toFloat() - trackDrawable.trackHeight / 2 + thunderIconBitmap.height / 2
 
         canvas.save()
         canvas.translate(x, y)
-
-
-        //thumbDrawable.updateDrawableBounds(widthPosition.roundToInt())
-
-        //canvas.drawRect(thumbDrawable.bounds, glowPaint)
-        //thumbDrawable.draw(canvas)
-
-
+        canvas.drawBitmap(alpha, 0f, 0f, paint)
         canvas.drawBitmap(thunderIconBitmap, 0f, 0f, null)
+
 
         canvas.restore()
     }
