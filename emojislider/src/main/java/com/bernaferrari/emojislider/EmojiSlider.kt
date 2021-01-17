@@ -331,30 +331,14 @@ class EmojiSlider @JvmOverloads constructor(
 
     private fun drawStar(canvas: Canvas) {
 
-        val widthPosition = thumbProgress * trackDrawable.bounds.width()
-
         val thumbScale = 0.6f
         starLottie.scale = thumbScale
-        val left = widthPosition + starLottie.intrinsicWidth / 7f
+
+        val x = thumbProgress * trackDrawable.bounds.width() + trackDrawable.bounds.left - starLottie.intrinsicWidth / 2f
+        val y = trackDrawable.bounds.top.toFloat() + trackDrawable.trackHeight / 2
         canvas.save()
-        canvas.translate(left, trackDrawable.bounds.top.toFloat() + starLottie.intrinsicHeight / 9f)
+        canvas.translate(x, y)
         starLottie.draw(canvas)
-        canvas.restore()
-    }
-
-    private fun drawProfilePicture(canvas: Canvas) {
-
-        val widthPosition = progress * trackDrawable.bounds.width()
-        val height: Float = trackDrawable.bounds.height() / 2f
-
-        canvas.save()
-        canvas.translate(trackDrawable.bounds.left.toFloat(), trackDrawable.bounds.top.toFloat())
-        canvas.scale(1f, 1f, widthPosition, height)
-
-        //resultDrawable.updateDrawableBounds(widthPosition.roundToInt())
-        canvas.drawRect(resultDrawable.bounds, debugPaint)
-        resultDrawable.draw(canvas)
-
         canvas.restore()
     }
 
