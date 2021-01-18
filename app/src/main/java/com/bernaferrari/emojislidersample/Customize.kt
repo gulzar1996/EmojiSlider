@@ -162,7 +162,7 @@ class Customize : Fragment() {
                     }
                 }
 
-                slider.emoji = itemClicked.emoji
+             //   slider.emoji = itemClicked.emoji
 
                 paintEmojiList(itemClicked.emoji)
             }
@@ -228,7 +228,7 @@ class Customize : Fragment() {
                     resource: Bitmap,
                     transition: Transition<in Bitmap>?
                 ) {
-                    slider.setResultDrawable(resource)
+                   // slider.setResultDrawable(resource)
                 }
             })
     }
