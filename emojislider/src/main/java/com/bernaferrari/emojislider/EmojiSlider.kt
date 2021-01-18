@@ -94,7 +94,8 @@ class EmojiSlider @JvmOverloads constructor(
 
     val thumbAnimation by lazy {
         SpringAnimation(thumbProgress, thumbAnimProperty, 0f).apply {
-            spring.stiffness = SpringForce.STIFFNESS_LOW
+            spring.stiffness = 800f
+            minimumVisibleChange = 1f / trackDrawable.bounds.width()
             setMinValue(0f)
             setMaxValue(1f)
         }
