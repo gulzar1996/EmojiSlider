@@ -1,6 +1,8 @@
 package com.bernaferrari.emojislider
 
-import android.R.attr.src
+import android.animation.ValueAnimator
+import android.animation.ValueAnimator.INFINITE
+import android.animation.ValueAnimator.REVERSE
 import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.*
@@ -8,8 +10,13 @@ import android.graphics.BlurMaskFilter.Blur
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.AnticipateOvershootInterpolator
+import android.view.animation.BounceInterpolator
 import androidx.annotation.DrawableRes
+import androidx.core.animation.doOnCancel
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.dynamicanimation.animation.DynamicAnimation
@@ -95,6 +102,7 @@ class EmojiSlider @JvmOverloads constructor(
     val thumbAnimation by lazy {
         SpringAnimation(thumbProgress, thumbAnimProperty, 0f).apply {
             spring.stiffness = 800f
+            spring.dampingRatio = SpringForce.DAMPING_RATIO_NO_BOUNCY
             minimumVisibleChange = 1f / trackDrawable.bounds.width()
             setMinValue(0f)
             setMaxValue(1f)
@@ -108,7 +116,7 @@ class EmojiSlider @JvmOverloads constructor(
 
     fun setProgress(newProgress: Float, isAnimation: Boolean = false) {
         if (isAnimation) {
-            progressAnimation.canSkipToEnd()
+            if (widthAnimator.isRunning.not()) widthAnimator.start()
             progressAnimation.animateToFinalPosition(newProgress)
         } else {
             progress = newProgress
@@ -170,6 +178,8 @@ class EmojiSlider @JvmOverloads constructor(
     // Initialization
     //////////////////////////////////////////
 
+    var thumbScale = 1f
+    var widthAnimator = ValueAnimator.ofFloat(1f, 1.5f)
 
     init {
         this.setLayerType(LAYER_TYPE_SOFTWARE, null)
@@ -212,6 +222,17 @@ class EmojiSlider @JvmOverloads constructor(
         starLottie.repeatCount = LottieDrawable.INFINITE
         starLottie.addAnimatorUpdateListener { invalidate() }
         starLottie.start()
+
+        widthAnimator.repeatMode = ValueAnimator.REVERSE;
+        widthAnimator.repeatCount = 1
+        widthAnimator.interpolator = AccelerateDecelerateInterpolator()
+        widthAnimator.addUpdateListener { animation ->
+            thumbScale = animation.animatedValue as Float
+            invalidate()
+        }
+
+
+
 
         if (attrs != null) {
             val array = context.obtainStyledAttributes(attrs, R.styleable.EmojiSlider)
@@ -327,6 +348,7 @@ class EmojiSlider @JvmOverloads constructor(
 
         canvas.save()
         canvas.translate(x, y)
+        canvas.scale(thumbScale, thumbScale, (thunderIconBitmap.width / 2.0).toFloat(), (thunderIconBitmap.height / 2.0).toFloat())
         canvas.drawBitmap(alpha, 0f, 0f, paint)
         canvas.drawBitmap(thunderIconBitmap, 0f, 0f, null)
 
