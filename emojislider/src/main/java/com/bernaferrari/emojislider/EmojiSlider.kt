@@ -136,9 +136,9 @@ class EmojiSlider @JvmOverloads constructor(
         super.onSizeChanged(w, h, oldw, oldh)
 
         this.trackDrawable.setBounds(
-                0 + Math.max(paddingLeft, mThumbOffset),
+                0 + paddingLeft + mThumbOffset,
                 h / 2 - trackDrawable.intrinsicHeight / 2,
-                w - Math.max(paddingRight, mThumbOffset),
+                w - (paddingRight + mThumbOffset),
                 h / 2 + trackDrawable.intrinsicHeight / 2
         )
     }
@@ -152,9 +152,8 @@ class EmojiSlider @JvmOverloads constructor(
         val density = context.resources.displayMetrics.density
 
         desiredWidth = (56 * density * 4).toInt()
-        desiredHeight =
-                (density * 8 + context.resources.getDimension(R.dimen.slider_sticker_slider_handle_size)).roundToInt()
-        mThumbOffset = desiredHeight / 2
+        desiredHeight = context.resources.getDimension(R.dimen.slider_sticker_slider_track_height).roundToInt() + 84
+        mThumbOffset = 84/2
 
         starLottie = LottieDrawable()
 
