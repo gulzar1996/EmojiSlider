@@ -1,4 +1,4 @@
-package com.bernaferrari.emojislidersample.bridge.jsbridge;
+package com.bernaferrari.emojislidersample.bridge;
 
 import android.webkit.ValueCallback;
 

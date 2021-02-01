@@ -1,4 +1,4 @@
-package com.bernaferrari.emojislidersample.bridge.jsbridge;
+package com.bernaferrari.emojislidersample.bridge;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
