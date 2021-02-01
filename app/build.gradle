@@ -62,6 +62,11 @@ dependencies {
     // Iconics
     implementation 'com.mikepenz:iconics-core:3.1.0@aar'
     implementation 'com.mikepenz:community-material-typeface:2.0.46.1@aar'
+    def appcompat_version = "1.2.0"
+
+    implementation "androidx.appcompat:appcompat:$appcompat_version"
+    // For loading and tinting drawables on older versions of the platform
+    implementation "androidx.appcompat:appcompat-resources:$appcompat_version"
 
 
     // About
