@@ -16,7 +16,8 @@ class Showcase : Fragment() {
             savedInstanceState: Bundle?
     ): View = inflater.inflate(R.layout.frag_main_game, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
     }
 
