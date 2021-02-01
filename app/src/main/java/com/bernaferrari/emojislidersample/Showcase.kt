@@ -18,7 +18,6 @@ class Showcase : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-
     }
 
 
