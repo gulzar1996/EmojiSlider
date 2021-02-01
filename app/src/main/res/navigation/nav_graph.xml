@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/showcase"
-        android:name="com.bernaferrari.emojislidersample.Showcase"
+        android:name="com.bernaferrari.emojislidersample.game.Showcase"
         android:label="MainFragment"
         tools:layout="@layout/frag_main" />
 
