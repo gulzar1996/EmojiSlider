@@ -1,89 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_grey_300"
-    android:clipChildren="false">
+    >
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:text="Send to JS"
+        app:layout_constraintEnd_toStartOf="@+id/bt_increase"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipChildren="false">
-
-        <LinearLayout
-            android:id="@+id/linearLayoutVertList2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clipChildren="false"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0">
+    <Button
+        android:id="@+id/bt_increase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="load url"
+        app:layout_constraintBottom_toBottomOf="@+id/button"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
-            <com.bernaferrari.emojislider.EmojiSlider
-                android:id="@+id/sliderv4"
-                style="@style/sliderStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:allow_reselection="true"
-                android:paddingStart="0dp"
-                android:paddingRight="0dp"
-                android:paddingEnd="0dp"
-                android:paddingLeft="0dp"
-                android:paddingTop="0dp"
-                android:paddingBottom="0dp"
-                app:bar_progress_color_end="#536DFE"
-                app:bar_progress_color_start="#40C4FF"
-                app:emoji="😭"
-                app:particle_direction="down"
-                app:progress_value="0.4"
-                app:register_touches_outside_thumb="false" />
+</androidx.constraintlayout.widget.ConstraintLayout>
 
 
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/bt_increase"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:text="Random"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayoutVertList2" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bt_increase"
-            tools:text="scaaca" />
-
-        <ImageView
-            android:id="@+id/tileDrawable"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            app:layout_constraintBottom_toBottomOf="@+id/textView3"
-            app:layout_constraintDimensionRatio="w,1:1"
-            app:layout_constraintEnd_toEndOf="@+id/textView3"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView3" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <View
-        android:id="@+id/slider_particle_system"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-</FrameLayout>
